@@ -31,15 +31,12 @@ class File
             $this->_path = rtrim($path, '/');
             $this->readDir();
         } elseif (is_file($path)) {
-            $path_info = pathinfo($path);
-            if ($path_info['extension'] == 'eml') {
+
                 $this->_mails[] = [
                     'is_deleted' => 0,
                     'file_name'  => $path
                 ];
-            } else {
-                throw new \Exception('File format not `eml`');
-            }
+
         } else {
             throw new \Exception('$path может быть либо папкой либо файлом');
         }
@@ -74,13 +71,14 @@ class File
     {
         $files = scandir($this->_path);
         foreach ($files as $file) {
-            $path_info = pathinfo($file);
-            if ($path_info['extension'] == 'eml') {
+
+              if(is_file($this->_path. '/'. $file)){
+
                 $this->_mails[] = [
                     'is_deleted' => 0,
                     'file_name'  => $file
                 ];
-            }
+              }
         }
     }
 
