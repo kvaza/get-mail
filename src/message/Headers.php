@@ -232,8 +232,8 @@ class Headers
     public static function decodeMimeStringPart(&$data)
     {
         array_shift($data);
-        $encode = strtoupper(array_shift($data));
-        $type = strtoupper(array_shift($data));
+        $encode = strtoupper((string)array_shift($data));
+        $type = strtoupper((string)array_shift($data));
         if ($type === '') {
             return [];
         }
