@@ -114,7 +114,11 @@ class Message
                         break;
                     }
 
-                    $body .= PHP_EOL.$part->getContentDecode();
+                    if(!is_null($body)){ // don't add EOL before first part
+                        $body .= PHP_EOL;
+                    }
+
+                    $body .= $part->getContentDecode();
                 }
             } else {
                 $body = $this->_parts[0]->getContentDecode();
@@ -402,11 +406,32 @@ class Message
      */
     public static function splitContent($str)
     {
-        $data = preg_split('/[\r\n]{3,}/si', $str);
+        // why 3 ?
+        // doesn't work if we need to parse file from linux system where we have \n\n (2 characters) instead \r\n\r\n (4 characters) in windows files
+        // $data = preg_split('/[\r\n]{3,}/si', $str);
+
+        // can be done like this
+        // $data = preg_split('/\r?\n\r?\n/si', $str);
+
+        /* // but no need to modify number of \r\n inside the message doing implode with static \r\n
+        return [
+        'header' => array_shift($data),
+        'content' => implode("\r\n", $data)
+        ];
+        */
+
+        // lets just fetch header without content changes
+        if(preg_match('/(.*?)\r?\n\r?\n(.*)/s', $str, $m)){
+
+            return [
+                'header' => $m[1],
+                'content' => $m[2]
+            ];
+        }
 
         return [
-            'header' => array_shift($data),
-            'content' => implode("\r\n", $data)
+            'header' => '',
+            'content' => $str
         ];
     }
 
