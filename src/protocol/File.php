@@ -28,13 +28,17 @@ class File
     public function __construct($path)
     {
         if (is_dir($path)) {
+
             $this->_path = rtrim($path, '/');
             $this->readDir();
+
         } elseif (is_file($path)) {
+
+                $this->_path = dirname($path);
 
                 $this->_mails[] = [
                     'is_deleted' => 0,
-                    'file_name'  => $path
+                    'file_name'  => basename($path)
                 ];
 
         } else {
