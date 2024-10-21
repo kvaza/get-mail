@@ -207,14 +207,19 @@ class Headers
     {
         $str = '';
         foreach ($strArray as $encode => $part) {
+
             $encodedStr = '';
             foreach ($part as $type => $strings) {
+
+                $resultStr = '';
+
                 if ($type === 'B') {
                     $resultStr = is_array($strings) ? implode(array_map('base64_decode', $strings)) : base64_decode($strings);
                 } elseif ($type === 'Q') {
                     $resultStr = is_array($strings) ? implode($strings) : $strings;
                     $resultStr = quoted_printable_decode($resultStr);
                 }
+
                 $encodedStr .= $resultStr;
             }
 
