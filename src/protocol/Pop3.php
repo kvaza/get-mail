@@ -74,14 +74,9 @@ class Pop3
                 }
         }
 
-        try {
-            $this->_socket = fsockopen($host, $port, $errno, $errstr, $this->timeoutConnection);
-        } catch (\Exception $e) {
-            //throw new \RuntimeException('cannot connect to host '.$host.PHP_EOL.$errstr, $errno);
-        }
-
+        $this->_socket = @fsockopen($host, $port, $errno, $errstr, $this->timeoutConnection);
         if (!$this->_socket) {
-            throw new \RuntimeException($e->getMessage());
+            throw new \RuntimeException('Unable to connect to '. $host);
         }
 
         $welcome = $this->readResponse();
