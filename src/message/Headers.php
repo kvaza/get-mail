@@ -205,8 +205,17 @@ class Headers
      */
     public static function decodeStrArray($strArray)
     {
+        $knownecodings =  mb_list_encodings();
+
         $str = '';
         foreach ($strArray as $encode => $part) {
+
+            // fix for:
+            // PHP Fatal error:  Uncaught ValueError: mb_convert_encoding():
+            // Argument #3 ($from_encoding) contains invalid encoding ...
+            if(!in_array($encode, $knownecodings)) {
+                $encode = 'UTF-8';
+            }
 
             $encodedStr = '';
             foreach ($part as $type => $strings) {
